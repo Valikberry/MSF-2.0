@@ -10,7 +10,7 @@ export default function MainMenuCards() {
       >
         <div className="relative h-16 w-full flex flex-col items-center justify-center">
           <h3 className="text-white font-semibold text-center text-xs sm:text-sm md:text-base">
-            Work with us
+            Share your services
           </h3>
           <h4 className="text-white text-center text-xs sm:text-sm">
             ( For drivers)

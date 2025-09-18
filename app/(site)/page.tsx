@@ -15,8 +15,6 @@ export default function CategoryPage() {
   const sheetId = typeof category === "string" ? category : "all";
 
   const [sheetData, setSheetData] = useState([]);
-  const [currentName, setCurrentName] = useState("");
-  const [currentDesc, setCurrentDesc] = useState("");
   const [loading, setLoading] = useState(true);
   const { sheets } = useSheets();
   const [error, setError] = useState("");
@@ -24,18 +22,16 @@ export default function CategoryPage() {
     async function fetchData() {
       setLoading(true);
       try {
-        const res = await fetch(`/api/sheets?category=${sheetId}`);
+        const res = await fetch(`/api/sheets?city=${sheetId}`);
 
         if (!res.ok) throw new Error(`API returned ${res.status}`);
         const data = await res.json();
-        
+
         setSheetData(data.sheetData);
-        setCurrentName(data.currentName);
-        setCurrentDesc(data.currentDesc);
       } catch (err) {
         console.error("Failed to fetch data:", err);
         setError(
-          `No communities found with ${category} jobs. Please check back later.`
+          `No Service found in ${category} city. Please check back later.`
         );
       } finally {
         setLoading(false);
@@ -53,7 +49,7 @@ export default function CategoryPage() {
         <div className="container mx-auto max-w-md px-4 py-3">
           <div className="container mx-auto max-w-md">
             <div className="flex flex-col items-center">
-              <p className="text-black-700 text-sm font-bold">
+              <p className="text-black-700 text-md font-bold">
                 Find & Book independent,reliable moving services in finland
               </p>
               <span className="flex items-center gap-1">
@@ -65,7 +61,7 @@ export default function CategoryPage() {
         </div>
 
         <div className="container mx-auto max-w-md px-4 py-4">
-          {!category && <MainMenuCards />}
+          <MainMenuCards />
           <CategoryFilterWrapper
             defaultActiveCategory={sheetId}
             basePath=""
@@ -98,7 +94,7 @@ export default function CategoryPage() {
                     />
                   </svg>
                   <p className="text-sm">
-                    {error || "No communities found. Please check back later."}
+                    {error || "No service found. Please check back later."}
                   </p>
                 </div>
               )}

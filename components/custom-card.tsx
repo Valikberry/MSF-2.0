@@ -41,7 +41,7 @@ export default function CustomCard({ data }: ProductCardProps) {
   return (
     <div className="relative">
       <Link
-        href={"#"}
+        href="/"
         target="_blank"
         rel="noopener noreferrer"
         passHref

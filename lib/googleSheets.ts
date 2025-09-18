@@ -1,4 +1,3 @@
-
 // Types
 interface GoogleSheetCell {
   v: string | number | null;
@@ -19,11 +18,146 @@ interface CategoryData {
   allDescription: string | number | null;
 }
 
-// Core function to fetch raw sheet data
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+  expires: number;
+}
+
+// Cache management
+class SheetCache {
+  private cache = new Map<string, CacheEntry<any>>();
+  private readonly CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+  constructor() {
+    // Clear cache on page reload/beforeunload
+    if (typeof window !== 'undefined') {
+      window.addEventListener('beforeunload', () => {
+        this.clearAll();
+      });
+
+      // Also clear on page visibility change (when tab becomes hidden)
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.clearExpired();
+        }
+      });
+
+      // Periodic cleanup every 2 minutes
+      setInterval(() => {
+        this.clearExpired();
+      }, 2 * 60 * 1000);
+    }
+  }
+
+  set<T>(key: string, data: T): void {
+    const now = Date.now();
+    const entry: CacheEntry<T> = {
+      data,
+      timestamp: now,
+      expires: now + this.CACHE_DURATION
+    };
+    
+    this.cache.set(key, entry);
+    console.log(`📦 Cached data for key: ${key} (expires in ${Math.round(this.CACHE_DURATION / 60000)} minutes)`);
+  }
+
+  get<T>(key: string): T | null {
+    const entry = this.cache.get(key);
+    
+    if (!entry) {
+      return null;
+    }
+
+    const now = Date.now();
+    
+    if (now > entry.expires) {
+      console.log(`⏰ Cache expired for key: ${key}`);
+      this.cache.delete(key);
+      return null;
+    }
+
+    const remainingTime = Math.round((entry.expires - now) / 60000);
+    console.log(`✅ Cache hit for key: ${key} (expires in ${remainingTime} minutes)`);
+    return entry.data;
+  }
+
+  has(key: string): boolean {
+    const entry = this.cache.get(key);
+    if (!entry) return false;
+    
+    if (Date.now() > entry.expires) {
+      this.cache.delete(key);
+      return false;
+    }
+    
+    return true;
+  }
+
+  delete(key: string): void {
+    this.cache.delete(key);
+    console.log(`🗑️ Deleted cache for key: ${key}`);
+  }
+
+  clearExpired(): void {
+    const now = Date.now();
+    let expiredCount = 0;
+    
+    for (const [key, entry] of this.cache.entries()) {
+      if (now > entry.expires) {
+        this.cache.delete(key);
+        expiredCount++;
+      }
+    }
+    
+    if (expiredCount > 0) {
+      console.log(`🧹 Cleared ${expiredCount} expired cache entries`);
+    }
+  }
+
+  clearAll(): void {
+    const count = this.cache.size;
+    this.cache.clear();
+    console.log(`🧹 Cleared all cache entries (${count} items)`);
+  }
+
+  getStats(): { size: number; entries: Array<{ key: string; age: number; remaining: number }> } {
+    const now = Date.now();
+    const entries = Array.from(this.cache.entries()).map(([key, entry]) => ({
+      key,
+      age: Math.round((now - entry.timestamp) / 60000),
+      remaining: Math.round((entry.expires - now) / 60000)
+    }));
+
+    return {
+      size: this.cache.size,
+      entries
+    };
+  }
+}
+
+// Global cache instance
+const sheetCache = new SheetCache();
+
+// Helper function to generate cache keys
+function getCacheKey(sheetName: string, spreadsheetId?: string, operation?: string): string {
+  const id = spreadsheetId || process.env.NEXT_PUBLIC_GOOGLESHEETS_ID || 'default';
+  return `${operation || 'sheet'}:${id}:${sheetName}`;
+}
+
+// Core function to fetch raw sheet data with caching
 async function fetchGoogleSheetRaw(
   sheetName: string, 
   spreadsheetId?: string
 ): Promise<(string | number | null)[][]> {
+  // Check cache first
+  const cacheKey = getCacheKey(sheetName, spreadsheetId, 'raw');
+  const cachedData = sheetCache.get<(string | number | null)[][]>(cacheKey);
+  
+  if (cachedData) {
+    return cachedData;
+  }
+
   const sheetId = spreadsheetId || process.env.NEXT_PUBLIC_GOOGLESHEETS_ID;
   if (!sheetId) {
     throw new Error('Spreadsheet ID not configured');
@@ -36,6 +170,8 @@ async function fetchGoogleSheetRaw(
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
 
   try {
+    console.log(`🌐 Fetching fresh data for sheet: ${sheetName}`);
+    
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -79,9 +215,12 @@ async function fetchGoogleSheetRaw(
       throw new Error(`Sheet "${sheetName}" is empty`);
     }
 
+    // Cache the result
+    sheetCache.set(cacheKey, rows);
+
     return rows;
 
-  } catch (error:any) {
+  } catch (error: any) {
     if (error.name === 'AbortError') {
       throw new Error(`Request timeout while fetching sheet "${sheetName}"`);
     }
@@ -122,19 +261,29 @@ function filterHeaderRows(rows: (string | number | null)[][]): (string | number 
   });
 }
 
-// Main function to get Google Sheet data with validation
+// Main function to get Google Sheet data with validation and caching
 export async function getGoogleSheetData(sheetName: string): Promise<(string | number | null)[][] | null> {
+  const cacheKey = getCacheKey(sheetName, undefined, 'processed');
+  const cachedData = sheetCache.get<(string | number | null)[][] | null>(cacheKey);
+  
+  if (cachedData !== null) {
+    return cachedData;
+  }
+
   try {
     const rawRows = await fetchGoogleSheetRaw(sheetName);
     const cleanedRows = cleanProductData(rawRows);
+    
     // Validate sheet name (position: first row, second-to-last column)
     const namePosition = { row: 0, col: rawRows[0].length - 2 };
     const isValid = validateSheetName(rawRows, sheetName, namePosition);
-    if (!isValid) {
-      return null;
-    }
-
-    return cleanedRows;
+    
+    const result = isValid ? cleanedRows : null;
+    
+    // Cache the processed result
+    sheetCache.set(cacheKey, result);
+    
+    return result;
 
   } catch (error) {
     console.error(`Error in getGoogleSheetData for "${sheetName}":`, error);
@@ -142,11 +291,17 @@ export async function getGoogleSheetData(sheetName: string): Promise<(string | n
   }
 }
 
-// Get category data with specific processing
+// Get category data with specific processing and caching
 export async function getAllCategoriesDataById(
   sheetName: string, 
   spreadsheetId: string
 ): Promise<CategoryData | null> {
+  const cacheKey = getCacheKey(sheetName, spreadsheetId, 'category');
+  const cachedData = sheetCache.get<CategoryData | null>(cacheKey);
+  
+  if (cachedData !== null) {
+    return cachedData;
+  }
   
   try {
     const rawRows = await fetchGoogleSheetRaw(sheetName, spreadsheetId);
@@ -156,7 +311,6 @@ export async function getAllCategoriesDataById(
       throw new Error(`Sheet "${sheetName}" doesn't have enough data`);
     }
 
-
     // Validate sheet name (position: second row, second-to-last column of cleaned data)
     const namePosition = { row: 1, col: cleanedRows[0].length - 2 };
     const isValid = validateSheetName(cleanedRows, sheetName, namePosition);
@@ -165,6 +319,7 @@ export async function getAllCategoriesDataById(
       console.warn(`⚠️ Sheet name validation failed for "${sheetName}"`);
       console.warn(`   Expected: "${sheetName}"`);
       console.warn(`   Found: "${cleanedRows[namePosition.row]?.[namePosition.col]}"`);
+      sheetCache.set(cacheKey, null);
       return null;
     }
 
@@ -175,13 +330,15 @@ export async function getAllCategoriesDataById(
     }
 
     const firstDataRow = filteredRows[0];
-    const allTitle = firstDataRow[firstDataRow.length - 4] ?? null;
-    const allDescription = firstDataRow[firstDataRow.length - 3] ?? null;
-
-    return {
-      allTitle,
-      allDescription
+    const result: CategoryData = {
+      allTitle: firstDataRow[firstDataRow.length - 4] ?? null,
+      allDescription: firstDataRow[firstDataRow.length - 3] ?? null
     };
+
+    // Cache the result
+    sheetCache.set(cacheKey, result);
+
+    return result;
 
   } catch (error) {
     console.error(`❌ Error in getAllCategoriesDataById for "${sheetName}":`, error);
@@ -189,7 +346,7 @@ export async function getAllCategoriesDataById(
   }
 }
 
-// Batch fetch multiple sheets
+// Batch fetch multiple sheets with intelligent caching
 export async function getAllSheetsByName(
   sheetIds: string[]
 ): Promise<Record<string, (string | number | null)[][]>> {
@@ -197,76 +354,119 @@ export async function getAllSheetsByName(
     return {};
   }
 
-  const results = await Promise.allSettled(
-    sheetIds.map(async (sheetId): Promise<[string, (string | number | null)[][]]> => {
-      try {
-        const rows = await getGoogleSheetData(sheetId);
-        
-        if (!rows) {
+  const allData: Record<string, (string | number | null)[][]> = {};
+  const uncachedSheetIds: string[] = [];
+
+  // Check cache for each sheet first
+  for (const sheetId of sheetIds) {
+    const cacheKey = getCacheKey(sheetId, undefined, 'batch');
+    const cachedData = sheetCache.get<(string | number | null)[][]>(cacheKey);
+    
+    if (cachedData) {
+      allData[sheetId] = cachedData;
+    } else {
+      uncachedSheetIds.push(sheetId);
+    }
+  }
+
+  // Only fetch uncached sheets
+  if (uncachedSheetIds.length > 0) {
+    console.log(`🔄 Fetching ${uncachedSheetIds.length} uncached sheets out of ${sheetIds.length} total`);
+    
+    const results = await Promise.allSettled(
+      uncachedSheetIds.map(async (sheetId): Promise<[string, (string | number | null)[][]]> => {
+        try {
+          const rows = await getGoogleSheetData(sheetId);
+          
+          if (!rows) {
+            return [sheetId, []];
+          }
+          const filteredRows = filterHeaderRows(rows);
+          
+          // Cache the batch result
+          const cacheKey = getCacheKey(sheetId, undefined, 'batch');
+          sheetCache.set(cacheKey, filteredRows);
+          
+          return [sheetId, filteredRows];
+
+        } catch (error) {
+          console.error(`Failed to fetch sheet "${sheetId}":`, error);
           return [sheetId, []];
         }
-        const filteredRows = filterHeaderRows(rows);
-        return [sheetId, filteredRows];
+      })
+    );
 
-      } catch (error) {
-        console.error(`Failed to fetch sheet "${sheetId}":`, error);
-        return [sheetId, []];
+    // Process results and handle any rejections
+    results.forEach((result, index) => {
+      const sheetId = uncachedSheetIds[index];
+      
+      if (result.status === 'fulfilled') {
+        const [id, data] = result.value;
+        allData[id] = data;
+      } else {
+        console.error(`Promise rejected for sheet "${sheetId}":`, result.reason);
+        allData[sheetId] = [];
       }
-    })
-  );
-
-  // Process results and handle any rejections
-  const allData: Record<string, (string | number | null)[][]> = {};
-  
-  results.forEach((result, index) => {
-    const sheetId = sheetIds[index];
-    
-    if (result.status === 'fulfilled') {
-      const [id, data] = result.value;
-      allData[id] = data;
-    } else {
-      console.error(`Promise rejected for sheet "${sheetId}":`, result.reason);
-      allData[sheetId] = [];
-    }
-  });
+    });
+  }
 
   return allData;
 }
 
-// Utility function to get multiple category data
+// Utility function to get multiple category data with caching
 export async function getMultipleCategoriesData(
   sheetNames: string[],
   spreadsheetId: string
 ): Promise<Record<string, CategoryData | null>> {
-  const results = await Promise.allSettled(
-    sheetNames.map(async (sheetName): Promise<[string, CategoryData | null]> => {
-      try {
-        const data = await getAllCategoriesDataById(sheetName, spreadsheetId);
-        return [sheetName, data];
-      } catch (error) {
-        console.error(`Failed to fetch category data for "${sheetName}":`, error);
-        return [sheetName, null];
-      }
-    })
-  );
-
   const categoryData: Record<string, CategoryData | null> = {};
-  
-  results.forEach((result, index) => {
-    const sheetName = sheetNames[index];
+  const uncachedSheetNames: string[] = [];
+
+  // Check cache first
+  for (const sheetName of sheetNames) {
+    const cacheKey = getCacheKey(sheetName, spreadsheetId, 'multi-category');
+    const cachedData = sheetCache.get<CategoryData | null>(cacheKey);
     
-    if (result.status === 'fulfilled') {
-      const [name, data] = result.value;
-      categoryData[name] = data;
+    if (cachedData !== undefined) {
+      categoryData[sheetName] = cachedData;
     } else {
-      categoryData[sheetName] = null;
+      uncachedSheetNames.push(sheetName);
     }
-  });
+  }
+
+  // Only fetch uncached data
+  if (uncachedSheetNames.length > 0) {
+    const results = await Promise.allSettled(
+      uncachedSheetNames.map(async (sheetName): Promise<[string, CategoryData | null]> => {
+        try {
+          const data = await getAllCategoriesDataById(sheetName, spreadsheetId);
+          const cacheKey = getCacheKey(sheetName, spreadsheetId, 'multi-category');
+          sheetCache.set(cacheKey, data);
+          return [sheetName, data];
+        } catch (error) {
+          console.error(`Failed to fetch category data for "${sheetName}":`, error);
+          const cacheKey = getCacheKey(sheetName, spreadsheetId, 'multi-category');
+          sheetCache.set(cacheKey, null);
+          return [sheetName, null];
+        }
+      })
+    );
+
+    results.forEach((result, index) => {
+      const sheetName = uncachedSheetNames[index];
+      
+      if (result.status === 'fulfilled') {
+        const [name, data] = result.value;
+        categoryData[name] = data;
+      } else {
+        categoryData[sheetName] = null;
+      }
+    });
+  }
 
   return categoryData;
 }
 
-// Add this new function to your googleSheets file
+// Enhanced product sheets fetching with caching
 export async function getAllProductSheetsByName(
   sheetIds: string[],
   spreadsheetId: string
@@ -275,48 +475,91 @@ export async function getAllProductSheetsByName(
     return {};
   }
 
-  const results = await Promise.allSettled(
-    sheetIds.map(async (sheetId): Promise<[string, (string | number | null)[][]]> => {
-      try {
-        // Use your existing getGoogleSheetData but pass spreadsheetId to fetchGoogleSheetRaw
-        const rawRows = await fetchGoogleSheetRaw(sheetId, spreadsheetId);
-        const cleanedRows = cleanProductData(rawRows);
-        
-        // Validate sheet name
-        const namePosition = { row: 0, col: rawRows[0].length - 2 };
-        const isValid = validateSheetName(rawRows, sheetId, namePosition);
-        
-        if (!isValid) {
+  const allData: Record<string, (string | number | null)[][]> = {};
+  const uncachedSheetIds: string[] = [];
+
+  // Check cache first
+  for (const sheetId of sheetIds) {
+    const cacheKey = getCacheKey(sheetId, spreadsheetId, 'product');
+    const cachedData = sheetCache.get<(string | number | null)[][]>(cacheKey);
+    
+    if (cachedData) {
+      allData[sheetId] = cachedData;
+    } else {
+      uncachedSheetIds.push(sheetId);
+    }
+  }
+
+  // Only fetch uncached sheets
+  if (uncachedSheetIds.length > 0) {
+    const results = await Promise.allSettled(
+      uncachedSheetIds.map(async (sheetId): Promise<[string, (string | number | null)[][]]> => {
+        try {
+          const rawRows = await fetchGoogleSheetRaw(sheetId, spreadsheetId);
+          const cleanedRows = cleanProductData(rawRows);
+          
+          // Validate sheet name
+          const namePosition = { row: 0, col: rawRows[0].length - 2 };
+          const isValid = validateSheetName(rawRows, sheetId, namePosition);
+          
+          if (!isValid) {
+            return [sheetId, []];
+          }
+
+          const filteredRows = filterHeaderRows(cleanedRows);
+          
+          // Cache the result
+          const cacheKey = getCacheKey(sheetId, spreadsheetId, 'product');
+          sheetCache.set(cacheKey, filteredRows);
+          
+          return [sheetId, filteredRows];
+
+        } catch (error) {
+          console.error(`Failed to fetch sheet "${sheetId}":`, error);
           return [sheetId, []];
         }
+      })
+    );
 
-        const filteredRows = filterHeaderRows(cleanedRows);
-        return [sheetId, filteredRows];
-
-      } catch (error) {
-        console.error(`Failed to fetch sheet "${sheetId}":`, error);
-        return [sheetId, []];
+    results.forEach((result, index) => {
+      const sheetId = uncachedSheetIds[index];
+      
+      if (result.status === 'fulfilled') {
+        const [id, data] = result.value;
+        allData[id] = data;
+      } else {
+        console.error(`Promise rejected for sheet "${sheetId}":`, result.reason);
+        allData[sheetId] = [];
       }
-    })
-  );
-
-  const allData: Record<string, (string | number | null)[][]> = {};
-  
-  results.forEach((result, index) => {
-    const sheetId = sheetIds[index];
-    
-    if (result.status === 'fulfilled') {
-      const [id, data] = result.value;
-      allData[id] = data;
-    } else {
-      console.error(`Promise rejected for sheet "${sheetId}":`, result.reason);
-      allData[sheetId] = [];
-    }
-  });
+    });
+  }
 
   return allData;
 }
 
-
-
-
+// Export cache utilities for manual management
+export const cacheUtils = {
+  // Clear all cached data
+  clearAll: () => sheetCache.clearAll(),
+  
+  // Clear expired entries
+  clearExpired: () => sheetCache.clearExpired(),
+  
+  // Clear specific sheet data
+  clearSheet: (sheetName: string, spreadsheetId?: string) => {
+    const operations = ['raw', 'processed', 'category', 'batch', 'multi-category', 'product'];
+    operations.forEach(op => {
+      const key = getCacheKey(sheetName, spreadsheetId, op);
+      sheetCache.delete(key);
+    });
+  },
+  
+  // Get cache statistics
+  getStats: () => sheetCache.getStats(),
+  
+  // Check if sheet is cached
+  isSheetCached: (sheetName: string, spreadsheetId?: string, operation = 'processed') => {
+    const key = getCacheKey(sheetName, spreadsheetId, operation);
+    return sheetCache.has(key);
+  }
+};

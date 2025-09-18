@@ -9,24 +9,11 @@ export default function Header() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-1.5">
               <Image src="/logo.png" alt={"Logo"} width={40} height={40} />
-            <div className=" font-bold text-sm py-[1px]">Sponsored Job Alert</div>
+            <div className=" font-bold text-sm py-[1px]">MSF</div>
             </Link>
           </div>
 
-          {/* <div className="flex items-center gap-2">
-            <Link  href="/products">
-              <button className="flex flex-row hover:bg-accent hover:text-accent-foreground py-2 pl-1 gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none">
-                <h3 className="">Apply fast</h3>
-
-                <Image
-                  width={20}
-                  height={20}
-                  src="/click-2384.svg"
-                  alt={"Apply fast"}
-                />
-              </button>
-            </Link>
-          </div> */}
+         
         </div>
       </div>
     </header>
