@@ -8,9 +8,10 @@ import CardsLayer from "@/components/CardsLayer";
 import CategoryFilterWrapper from "@/components/CategoryFilterWrapper";
 import MainMenuCards from "@/components/MenuCards";
 import { useSheets } from "@/context/AppContext";
+import { Calendar } from "lucide-react";
 
 export default function CategoryPage() {
-  const { category } = useParams(); 
+  const { category } = useParams();
   const sheetId = typeof category === "string" ? category : "all";
 
   const [sheetData, setSheetData] = useState([]);
@@ -27,6 +28,7 @@ export default function CategoryPage() {
 
         if (!res.ok) throw new Error(`API returned ${res.status}`);
         const data = await res.json();
+        
         setSheetData(data.sheetData);
         setCurrentName(data.currentName);
         setCurrentDesc(data.currentDesc);
@@ -50,18 +52,14 @@ export default function CategoryPage() {
 
         <div className="container mx-auto max-w-md px-4 py-3">
           <div className="container mx-auto max-w-md">
-            <div className="bg-green-50 rounded-lg overflow-hidden border border-green-200 hover:shadow-md transition-shadow px-3 py-2">
-              <h1 className="text-xl font-bold text-green-800 mb-2">
-                {sheetId !== "all"
-                  ? currentName || category
-                  : "Get Hired Abroad!"}
-              </h1>
-              <p className="text-black-700 text-sm">
-                {sheetId !== "all"
-                  ? currentDesc ||
-                    `Find ${category} Visa Sponsored Jobs on whatsapp or Telegram`
-                  : "Find Visa Sponsored Jobs on whatsapp & Telegram Job Communities"}
+            <div className="flex flex-col items-center">
+              <p className="text-black-700 text-sm font-bold">
+                Find & Book independent,reliable moving services in finland
               </p>
+              <span className="flex items-center gap-1">
+                <Calendar color="red" size={15} />
+                <small className="flex items-center">Book online 24/7</small>
+              </span>
             </div>
           </div>
         </div>

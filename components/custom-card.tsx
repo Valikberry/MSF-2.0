@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 
 interface ProductCardProps {
-  data: [string, string, number, string, string, string, string, string];
+  data: [string, string, string, string, string, string, string, string];
 }
 
 const statusColors: Record<string, string> = {
@@ -16,128 +16,123 @@ const statusColors: Record<string, string> = {
 export default function CustomCard({ data }: ProductCardProps) {
   const [
     imageUrl = "/placeholder.svg",
-    title = "No title",
-    preview = 0,
-    active = "red",
-    status = "no",
-    link = "#",
-    whatsAppOrTelegram = "WhatsApp",
-    isFull = "no",
+    id,
+    company = "MS STAR MOVING COMPANY",
+    type = "Van and Driver Only",
+    driverImageUrl = "/placeholder.svg",
+    price = "38",
+    country1,
+    country2,
   ] = data;
 
-  // console.log("Cards data:status ", status);
-  const isAvailable = status?.toLowerCase() === "yes";
+  console.log("Cards data:status ", driverImageUrl);
+  const isAvailable = true;
   const activeColor = statusColors[isAvailable ? "green" : "red"];
+  const whatsAppOrTelegram = "WhatsApp";
   const [isBlocked, setIsBlocked] = useState(false);
 
-  const handleClick = (e: any) => {
-    if (isFull) {
-      e.preventDefault();
-      setIsBlocked(true);
-    }
+  const handleClick = () => {
+    // Handle click logic
   };
 
-  if (isBlocked) {
-    return (
-      <div className="relative flex gap-3 bg-gray-100 rounded-lg overflow-hidden border border-red-300 p-4 text-red-600 shadow-sm">
-        {/* Close button */}
-        <button
-          onClick={() => setIsBlocked(false)}
-          className="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-sm font-bold"
-          aria-label="Close"
-        >
-          ×
-        </button>
+  const link = "#";
+  const title = company;
 
-        <div className="flex flex-col justify-center items-center w-full text-center">
-          <p className="font-semibold text-sm">{title} is full</p>
-          <p className="text-xs text-gray-600">Please try another group</p>
-        </div>
-      </div>
-    );
-  }
   return (
-    <div className="">
+    <div className="relative">
       <Link
-        href={link || "#"}
+        href={"#"}
         target="_blank"
         rel="noopener noreferrer"
         passHref
         className="block"
         onClick={handleClick}
       >
-        <div className="flex gap-3 bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-          {/*<Link href={link || "#"} target="_blank" rel="noopener noreferrer" passHref className="block">*/}
-          <div className="relative h-24 w-24 pr-4 flex-shrink-0">
+        <div className="flex items-stretch gap-4 bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow  relative min-h-[120px]">
+          {/* Best Pick Badge */}
+          <div className="absolute top-0 right-0 bg-red-600 text-white text-xs px-3 py-1  font-medium z-10">
+            Best Pick
+          </div>
+
+          {/* WhatsApp Icon */}
+          <div className="absolute top-7 right-4 z-10">
+            <Image
+              src="/whatsapp-color-svgrepo-com.svg"
+              alt="WhatsApp"
+              width={10}
+              height={10}
+              className="w-6 h-6"
+            />
+          </div>
+
+          {/* Left side - Main image with driver avatar - Full height */}
+          <div className="relative w-28 flex-shrink-0 self-stretch">
             <Image
               src={imageUrl || "/placeholder.svg"}
               alt={title || "no title"}
               fill
-              className="object-cover"
-              sizes="96px"
+              className="object-cover rounded"
+              sizes="112px"
             />
+
+            {/* Driver avatar overlay */}
+            <div className="absolute bottom-1 left-1  w-8 h-8 rounded-full border-2 border-white overflow-hidden bg-white">
+              <Image
+                src={driverImageUrl || "/placeholder.svg"}
+                alt="Driver"
+                fill
+                className="object-cover"
+                sizes="40px"
+              />
+            </div>
           </div>
-          {/*</Link>*/}
 
-          {/* Right Content */}
-          <div className="flex-1 p-3">
-            <div className="flex flex-col justify-between h-full">
-              {/* Title */}
-              <div className="flex justify-between">
-                <h3 className="font-medium mb-1">{title || "No title"}</h3>
-                {whatsAppOrTelegram === "WhatsApp" ? (
-                  <Image
-                    src="/whatsapp-color-svgrepo-com.svg"
-                    alt={"whatsAppLink"}
-                    width={16}
-                    height={16}
-                  />
-                ) : (
-                  <Image
-                    src="/telegram-svgrepo-com.svg"
-                    alt={"tgLink"}
-                    width={18}
-                    height={18}
-                  />
-                )}
+          {/* Middle and Right Content Combined */}
+          <div className="flex-1 min-w-0 flex flex-col justify-center gap-2 p-2 mt-6">
+            {/* Row 1: Company name */}
+            <div>
+              <h3 className="font-bold text-md text-gray-900">{company}</h3>
+            </div>
+
+            {/* Row 2: Status badges */}
+            <div className="flex flex-wrap gap-2">
+              {isAvailable ? (
+                <div className="bg-[#CAF60B] text-green-700 text-xs px-1 py-1 rounded-sm font-medium">
+                  Active
+                </div>
+              ) : (
+                <div className="bg-red-100 text-red-800 text-xs px-1 py-1 rounded-sm font-medium">
+                  Not Active
+                </div>
+              )}
+
+              {whatsAppOrTelegram === "WhatsApp" ? (
+                <div className="bg-[#F0FDF4] text-[#15803D] text-xs px-3 py-1 rounded-full font-medium">
+                  WhatsApp Community
+                </div>
+              ) : (
+                <div className="bg-blue-100 text-green-800 text-xs px-3 py-1 rounded-full font-medium">
+                  Telegram Community
+                </div>
+              )}
+            </div>
+
+            {/* Row 3: Service type and Price */}
+            <div className="flex items-center justify-between">
+              <div className="bg-[#E9F970] text-[#4A5258] text-sm px-1 py-1 rounded font-medium">
+                {type}
               </div>
-
-              {/* Availability + Status dot */}
-              <div className="flex items-center gap-2 justify-between">
-                <div className="flex flex-row gap-2">
-                  {isAvailable ? (
-                    <div className="bg-green-50 text-green-700 text-xs px-2 py-0.5 rounded">
-                      Active
-                    </div>
-                  ) : (
-                    <div className="bg-red-50 text-red-700 text-xs px-2 py-0.5 rounded">
-                      Not Active
-                    </div>
-                  )}
-                  {whatsAppOrTelegram === "WhatsApp" ? (
-                    <div className="bg-green-50 text-green-700 text-xs px-2 py-0.5 rounded">
-                      {/*{isAvailable ? "Active" : "Not Active"}*/}
-                      WhatsApp Community
-                    </div>
-                  ) : (
-                    <div className="bg-blue-50 text-blue-700 text-xs px-2 py-0.5 rounded">
-                      {/*{isAvailable ? "Active" : "Not Active"}*/}
-                      Telegram Community
-                    </div>
-                  )}
+              
+              <div className="flex items-center gap-2">
+                <div className="text-right">
+                  <div className="text-sm text-gray-600 font-bold"> € {price} Per Hour</div>
                 </div>
-
-                <div className="flex gap-2 items-center">
-                  <div
-                    aria-label="Status indicator"
-                    role="status"
-                    className="h-[6px] w-[6px] rounded-full ripple-wrapper m-1"
-                    style={{
-                      backgroundColor: activeColor,
-                      ["--ripple-color" as any]: activeColor,
-                    }}
-                  />
-                </div>
+                
+                {/* Status dot */}
+                <div
+                  className="h-2 w-2 rounded-full"
+                  style={{ backgroundColor: activeColor }}
+                />
               </div>
             </div>
           </div>
