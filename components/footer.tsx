@@ -15,7 +15,7 @@ export default function Footer() {
           <span className="text-green-800">|</span>
           <Link href="/faq">FAQ</Link>
           <span className="text-green-800">|</span>
-          {/* <Link href="/sitemap">Sitemap</Link> */}
+       
         </div>
 
         {/* Contact Info */}
