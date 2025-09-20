@@ -11,9 +11,9 @@ export default function FAQ({ isProduct = false }: FAQProps) {
 
   const faqData = [
     {
-      question: "What is SponsoredJobsAlert.com?",
+      question: "What is movingservicesfinland.com?",
       answer:
-        "SponsoredJobsAlert.com is a free community platform that helps job seekers discover visa-sponsored job opportunities in countries like the UK, USA, Canada, and more. We share real-time alerts via WhatsApp and Telegram.",
+        "movingservicesfinland.com is a free community platform that helps job seekers discover visa-sponsored job opportunities in countries like the UK, USA, Canada, and more. We share real-time alerts via WhatsApp and Telegram.",
     },
     {
       question: "Is this a job agency or recruiter?",
@@ -58,7 +58,7 @@ export default function FAQ({ isProduct = false }: FAQProps) {
     {
       question: "How can I get support?",
       answer:
-        "For any questions or help: Email us at contact@sponsoredjobsalert.com, or message us via WhatsApp Support.",
+        "For any questions or help: Email us at contact@movingservicesfinland.com, or message us via WhatsApp Support.",
     },
   ];
 

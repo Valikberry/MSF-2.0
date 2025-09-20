@@ -7,13 +7,13 @@ export default function Footer() {
       <div className="container mx-auto max-w-xl py-4 text-center">
         {/* Nav Links */}
         <div className="flex flex-wrap justify-center gap-2 text-sm font-semibold text-gray-800 mb-2">
-          <Link href="/about">About</Link>
+          <Link href="https://www.movingservicesfinland.com/About">About</Link>
           <span className="text-green-800">|</span>
-          <Link href="/contact">Contact</Link>
+          <Link href="https://www.movingservicesfinland.com/Contact">Contact</Link>
           <span className="text-green-800">|</span>
-          <Link href="/terms-conditions">T&C</Link>
+          <Link href="https://www.movingservicesfinland.com">T&C</Link>
           <span className="text-green-800">|</span>
-          <Link href="/faq">FAQ</Link>
+          <Link href="https://www.movingservicesfinland.com">FAQ</Link>
           <span className="text-green-800">|</span>
        
         </div>
@@ -23,10 +23,10 @@ export default function Footer() {
           <p>
             You may reach us at{" "}
             <a
-              href="mailto:contact@sponsoredjobsalert.com"
+              href="mailto:contact@movingservicesfinland.com"
               className="underline hover:text-green-800"
             >
-              contact@sponsoredjobsalert.com
+              contact@movingservicesfinland.com
             </a>
           </p>
           <p>We work 24/7</p>
@@ -35,7 +35,7 @@ export default function Footer() {
         {/* Social Icons */}
         <div className="flex justify-center items-center gap-4">
           <a
-            href="https://www.youtube.com/@sponsoredjobalert"
+            href="https://www.youtube.com/@movingservicesfinland"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -71,7 +71,7 @@ export default function Footer() {
             />
           </a>
           <a
-            href="https://www.tiktok.com/@sponsoredjobalert"
+            href="https://www.tiktok.com/@movingservicesfinland"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -83,12 +83,12 @@ export default function Footer() {
             />
           </a>
           <a
-            href="https://x.com/sponsoredjobA"
+            href="https://x.com/movingservicesfinland"
             target="_blank"
             rel="noopener noreferrer"
           >
             <Image
-              src="/footer/xlogo.png"
+              src="/footer/xlogo.jpeg"
               alt="Instagram"
               width={26}
               height={26}

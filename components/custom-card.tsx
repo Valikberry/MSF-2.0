@@ -21,47 +21,33 @@ export default function CustomCard({ data }: ProductCardProps) {
     type = "Van and Driver Only",
     driverImageUrl = "/placeholder.svg",
     price = "38",
-    country1,
-    country2,
+    bestPick,
+    active,
   ] = data;
 
   console.log("Cards data:status ", driverImageUrl);
-  const isAvailable = true;
+  const isAvailable = active === "yes" ? true : false;
+  const isBestPick = bestPick === "yes" ? true : false;
   const activeColor = statusColors[isAvailable ? "green" : "red"];
-  const whatsAppOrTelegram = "WhatsApp";
-  const [isBlocked, setIsBlocked] = useState(false);
 
   const handleClick = () => {
-    // Handle click logic
+    console.log(id, "company id");
   };
 
-  const link = "#";
   const title = company;
 
   return (
     <div className="relative">
-      <Link
-        href="/"
-        target="_blank"
-        rel="noopener noreferrer"
-        passHref
-        className="block"
-        onClick={handleClick}
-      >
-        <div className="flex items-stretch gap-4 bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow  relative min-h-[120px]">
-          {/* Best Pick Badge */}
-          <div className="absolute top-0 right-0 bg-red-600 text-white text-xs px-3 py-1  font-medium z-10">
-            Best Pick
-          </div>
-
+      <div rel="noopener noreferrer" className="block" onClick={handleClick}>
+        <div className="flex items-stretch gap-4 bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow  relative min-h-[100px]">
           {/* WhatsApp Icon */}
-          <div className="absolute top-7 right-4 z-10">
+          <div className="absolute top-2 right-2 z-10">
             <Image
               src="/whatsapp-color-svgrepo-com.svg"
               alt="WhatsApp"
-              width={10}
-              height={10}
-              className="w-6 h-6"
+              width={8}
+              height={8}
+              className="w-5 h-5"
             />
           </div>
 
@@ -88,16 +74,19 @@ export default function CustomCard({ data }: ProductCardProps) {
           </div>
 
           {/* Middle and Right Content Combined */}
-          <div className="flex-1 min-w-0 flex flex-col justify-center gap-2 p-2 mt-6">
+          <div className="flex-1 min-w-0 flex flex-col justify-center gap-2 p-2">
             {/* Row 1: Company name */}
             <div>
-              <h3 className="font-bold text-md text-gray-900">{company}</h3>
+              <h3 className="font-bold text-sm text-gray-900">{company}</h3>
             </div>
 
             {/* Row 2: Status badges */}
             <div className="flex flex-wrap gap-2">
               {isAvailable ? (
-                <div className="bg-[#CAF60B] text-green-700 text-xs px-1 py-1 rounded-sm font-medium">
+                // <div className="bg-[#CAF60B] text-green-700 text-xs px-1 py-1 rounded-sm font-medium">
+                //   Active
+                // </div>
+                <div className="bg-[#F0FDF4] text-gray-700 text-xs px-1 py-1 rounded-sm font-medium">
                   Active
                 </div>
               ) : (
@@ -106,28 +95,30 @@ export default function CustomCard({ data }: ProductCardProps) {
                 </div>
               )}
 
-              {whatsAppOrTelegram === "WhatsApp" ? (
-                <div className="bg-[#F0FDF4] text-[#15803D] text-xs px-3 py-1 rounded-full font-medium">
-                  WhatsApp Community
-                </div>
-              ) : (
-                <div className="bg-blue-100 text-green-800 text-xs px-3 py-1 rounded-full font-medium">
-                  Telegram Community
+              <div className="bg-[#F0FDF4] text-[#15803D] text-xs px-3 py-1 rounded-sm font-medium">
+                WhatsApp
+              </div>
+              {isBestPick && (
+                <div className="bg-[#F0FDF4] text-red-800 text-xs px-3 py-1 rounded-sm font-medium">
+                  Best pick
                 </div>
               )}
             </div>
 
             {/* Row 3: Service type and Price */}
             <div className="flex items-center justify-between">
-              <div className="bg-[#E9F970] text-[#4A5258] text-sm px-1 py-1 rounded font-medium">
+              <div className="bg-[#E9F970] text-[#4A5258] text-xs px-1 py-1 rounded font-medium">
                 {type}
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <div className="text-right">
-                  <div className="text-sm text-gray-600 font-bold"> € {price} Per Hour</div>
+                  <div className="text-xs text-gray-600 font-bold">
+                    {" "}
+                    € {price} Per Hour
+                  </div>
                 </div>
-                
+
                 {/* Status dot */}
                 <div
                   className="h-2 w-2 rounded-full"
@@ -137,7 +128,7 @@ export default function CustomCard({ data }: ProductCardProps) {
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }

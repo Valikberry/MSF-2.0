@@ -49,8 +49,8 @@ export default function CategoryPage() {
         <div className="container mx-auto max-w-md px-4 py-3">
           <div className="container mx-auto max-w-md">
             <div className="flex flex-col items-center">
-              <p className="text-black-700 text-md font-bold">
-                Find & Book independent,reliable moving services in finland
+              <p className="text-black-700 text-sm font-bold">
+              Finland Online Marketplace of Moving Labor Services
               </p>
               <span className="flex items-center gap-1">
                 <Calendar color="red" size={15} />

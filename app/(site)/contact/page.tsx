@@ -53,10 +53,10 @@ export default function AboutPage() {
               <p>
                 📧 <strong>Email:</strong>{" "}
                 <a
-                  href="mailto:contact@sponsoredjobsalert.com"
+                  href="mailto:contact@movingservicesfinland.com"
                   className="text-black-700 underline"
                 >
-                  contact@sponsoredjobsalert.com
+                  contact@movingservicesfinland.com
                 </a>
               </p>
               <div>

@@ -8,7 +8,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-1.5">
-              <Image src="/logo.png" alt={"Logo"} width={40} height={40} />
+              <Image src="/logo.jpeg" alt={"Logo"} width={40} height={40} />
             <div className=" font-bold text-sm py-[1px]">MSF</div>
             </Link>
           </div>
