@@ -7,14 +7,14 @@ export default function Footer() {
       <div className="container mx-auto max-w-xl py-4 text-center">
         {/* Nav Links */}
         <div className="flex flex-wrap justify-center gap-2 text-sm font-semibold text-gray-800 mb-2">
-          <Link href="https://www.movingservicesfinland.com/About">About</Link>
+          <Link href="https://www.movingservicesfinland.com/About" target="_blank">About</Link>
           <span className="text-green-800">|</span>
-          <Link href="https://www.movingservicesfinland.com/Contact">Contact</Link>
+          <Link href="https://www.movingservicesfinland.com/Contact" target="_blank">Contact</Link>
           <span className="text-green-800">|</span>
-          <Link href="https://www.movingservicesfinland.com">T&C</Link>
+          <Link href="https://www.movingservicesfinland.com" target="_blank">T&C</Link>
           <span className="text-green-800">|</span>
-          <Link href="https://www.movingservicesfinland.com">FAQ</Link>
-          <span className="text-green-800">|</span>
+          <Link href="https://www.movingservicesfinland.com" target="_blank">FAQ</Link>
+
        
         </div>
 
@@ -88,7 +88,7 @@ export default function Footer() {
             rel="noopener noreferrer"
           >
             <Image
-              src="/footer/xlogo.jpeg"
+              src="/footer/xlogo.png"
               alt="Instagram"
               width={26}
               height={26}

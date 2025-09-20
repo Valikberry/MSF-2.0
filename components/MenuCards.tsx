@@ -9,7 +9,7 @@ export default function MainMenuCards() {
         className="block bg-gradient-to-b from-[#0a3747] to-[#344b5c] rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow"
       >
         <div className="relative h-16 w-full flex flex-col items-center justify-center">
-          <h3 className="text-white font-semibold text-center text-xs sm:text-sm md:text-base">
+          <h3 className="text-white font-semibold text-center text-sm">
             Share your services
           </h3>
           <h4 className="text-white text-center text-xs sm:text-sm">
