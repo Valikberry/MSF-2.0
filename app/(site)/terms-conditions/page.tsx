@@ -20,7 +20,7 @@ export default function AboutPage() {
       <section className="px-4 py-6">
         <div className="container mx-auto max-w-md px-4">
           <p>
-            Welcome to <strong>SponsoredJobsAlert.com</strong>. By accessing our
+            Welcome to <strong>movingservicesfinland.com</strong>. By accessing our
             website or joining our communities on WhatsApp or Telegram, you
             agree to the following terms. Please review them carefully.
           </p>
@@ -28,7 +28,7 @@ export default function AboutPage() {
           <div>
             <h2 className="font-bold text-black-800">1. Service Overview</h2>
             <p>
-              SponsoredJobsAlert.com is a platform that delivers curated
+              movingservicesfinland.com is a platform that delivers curated
               visa-sponsored job alerts through WhatsApp and Telegram
               communities. We are not a recruitment agency or employer. We do
               not guarantee job offers or employment.
@@ -81,7 +81,7 @@ export default function AboutPage() {
               5. No Data Storage Policy
             </h2>
             <p>
-              SponsoredJobsAlert.com does not handle or store any personal data
+              movingservicesfinland.com does not handle or store any personal data
               on our own servers. We do not request or save resumes, IDs, or any
               sensitive user information.
             </p>
@@ -97,7 +97,7 @@ export default function AboutPage() {
               6. Intellectual Property
             </h2>
             <p>
-              All content on SponsoredJobsAlert.com — including branding,
+              All content on movingservicesfinland.com — including branding,
               writing, and structure — is protected. Do not reuse or republish
               our content without written permission.
             </p>
@@ -147,7 +147,7 @@ export default function AboutPage() {
         <div className="container mx-auto max-w-md px-4">
           <p>
             Your privacy is important to us. At{" "}
-            <strong>SponsoredJobsAlert.com</strong>, we keep things simple: we
+            <strong>movingservicesfinland.com</strong>, we keep things simple: we
             do not collect, store, or process any personal data on our own
             servers. All communication happens through WhatsApp and Telegram,
             which handle encryption and user privacy independently.
@@ -222,10 +222,10 @@ export default function AboutPage() {
             <p className="space-y-1">
               📧 <strong>Email:</strong>{" "}
               <a
-                href="mailto:privacy@sponsoredjobsalert.com"
+                href="mailto:privacy@movingservicesfinland.com"
                 className="text-black-700 underline"
               >
-                privacy@sponsoredjobsalert.com
+                privacy@movingservicesfinland.com
               </a>
               <br />
               💬 <strong>WhatsApp Support:</strong> Available through our group

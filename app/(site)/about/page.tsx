@@ -21,12 +21,12 @@ export default function AboutPage() {
       <section className="px-4 py-6">
         <div className="container mx-auto max-w-md px-4 space-y-6">
           <h2 className="font-bold text-black-800">
-            Welcome to SponsoredJobsAlert.com
+            Welcome to movingservicesfinland.com
           </h2>
 
           <div className="text-black space-y-3">
             <p>
-              <strong> SponsoredJobsAlert.com</strong>  is a free,
+              <strong> movingservicesfinland.com</strong>  is a free,
                mobile-first, community-driven alert system helping job seekers
               discover real, verified openings from employers that offer visa
               sponsorship.
@@ -60,7 +60,7 @@ export default function AboutPage() {
               </p>
             </div>
             <p>
-              SponsoredJobsAlert.com was built for you — you're just one
+              movingservicesfinland.com was built for you — you're just one
               notification away from a job that can launch your career abroad.
             </p>
             <h2 className="font-bold text-black-800">⏰ How it Works :</h2>
@@ -69,7 +69,7 @@ export default function AboutPage() {
                 className="list-disc list-inside ml-4"
                 // style={{ fontSize: 13 }}
               >
-                <li>Go to SponsoredJobsAlert.com</li>
+                <li>Go to movingservicesfinland.com</li>
                 <li>
                   Pick the country you're interested in (UK, Canada, USA, etc.)
                 </li>
