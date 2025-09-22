@@ -7,13 +7,13 @@ export default function Footer() {
       <div className="container mx-auto max-w-xl py-4 text-center">
         {/* Nav Links */}
         <div className="flex flex-wrap justify-center gap-2 text-sm font-semibold text-gray-800 mb-2">
-          <Link href="https://www.movingservicesfinland.com/About" target="_blank">About</Link>
+          <Link href="https://www.info.movingservicesfinland.com/About" target="_blank">About</Link>
           <span className="text-green-800">|</span>
-          <Link href="https://www.movingservicesfinland.com/Contact" target="_blank">Contact</Link>
+          <Link href="https://www.info.movingservicesfinland.com/Contact" target="_blank">Contact</Link>
           <span className="text-green-800">|</span>
-          <Link href="https://www.movingservicesfinland.com" target="_blank">T&C</Link>
+          <Link href="https://www.info.movingservicesfinland.com" target="_blank">T&C</Link>
           <span className="text-green-800">|</span>
-          <Link href="https://www.movingservicesfinland.com" target="_blank">FAQ</Link>
+          <Link href="https://www.info.movingservicesfinland.com" target="_blank">FAQ</Link>
 
        
         </div>

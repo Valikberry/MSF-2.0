@@ -1,6 +1,4 @@
-import Link from "next/link";
 import Image from "next/image";
-import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 
 interface ProductCardProps {
@@ -25,13 +23,50 @@ export default function CustomCard({ data }: ProductCardProps) {
     active,
   ] = data;
 
-  console.log("Cards data:status ", driverImageUrl);
   const isAvailable = active === "yes" ? true : false;
   const isBestPick = bestPick === "yes" ? true : false;
   const activeColor = statusColors[isAvailable ? "green" : "red"];
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const handleClick = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    setError(null);
 
-  const handleClick = () => {
-    console.log(id, "company id");
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/initiate-chat`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            companyId: id,
+            imageUrl: imageUrl || "https://i.postimg.cc/mDw9dWqW/image.png",
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data, "====");
+
+      if (data.waLink) {
+        // Redirect to the WhatsApp link
+        window.open(data.waLink, "_blank", "noopener,noreferrer");
+      } else {
+        throw new Error("No WhatsApp link received from server");
+      }
+    } catch (err: any) {
+      console.error("Error initiating WhatsApp chat:", err);
+      setError(err.message || "Failed to initiate WhatsApp chat");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const title = company;
@@ -41,6 +76,12 @@ export default function CustomCard({ data }: ProductCardProps) {
       <div rel="noopener noreferrer" className="block" onClick={handleClick}>
         <div className="flex items-stretch gap-4 bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow  relative min-h-[100px]">
           {/* WhatsApp Icon */}
+          {isLoading && (
+            <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-20">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+            </div>
+          )}
+
           <div className="absolute top-2 right-2 z-10">
             <Image
               src="/whatsapp-color-svgrepo-com.svg"
@@ -107,9 +148,13 @@ export default function CustomCard({ data }: ProductCardProps) {
 
             {/* Row 3: Service type and Price */}
             <div className="flex items-center justify-between">
-              <div className="bg-[#E9F970] text-[#4A5258] text-xs px-1 py-1 rounded font-medium">
-                {type}
-              </div>
+              {type ? (
+                <div className="bg-[#E9F970] text-[#4A5258] text-xs px-1 py-1 rounded font-medium">
+                  {type}
+                </div>
+              ) : (
+                <div></div>
+              )}
 
               <div className="flex items-center gap-2">
                 <div className="text-right">
@@ -129,6 +174,19 @@ export default function CustomCard({ data }: ProductCardProps) {
           </div>
         </div>
       </div>
+      {error && (
+        <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-700 text-xs">
+          <div className="flex items-center justify-between">
+            <span>{error}</span>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-500 hover:text-red-700 ml-2"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
