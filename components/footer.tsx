@@ -11,9 +11,9 @@ export default function Footer() {
           <span className="text-green-800">|</span>
           <Link href="https://www.info.movingservicesfinland.com/Contact" target="_blank">Contact</Link>
           <span className="text-green-800">|</span>
-          <Link href="https://www.info.movingservicesfinland.com" target="_blank">T&C</Link>
+          <Link href="https://www.info.movingservicesfinland.com/Terms-of-service" target="_blank">T&C</Link>
           <span className="text-green-800">|</span>
-          <Link href="https://www.info.movingservicesfinland.com" target="_blank">FAQ</Link>
+          <Link href="https://www.info.movingservicesfinland.com/msf-blog" target="_blank">FAQ</Link>
 
        
         </div>
