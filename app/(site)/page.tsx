@@ -53,7 +53,7 @@ export default function CategoryPage() {
                 Finland’s Online Marketplace of Moving Services
               </h1>
 
-              <h2>
+              <h2  className="text-black-700 text-[14px] font-medium text-center">
                 Popular cities: Helsinki · Espoo · Vantaa · Tampere · Porvoo
               </h2>
             </div>
@@ -61,6 +61,7 @@ export default function CategoryPage() {
         </div>
 
         <div className="container mx-auto max-w-md px-4 py-4">
+      
           <MainMenuCards />
           <CategoryFilterWrapper
             defaultActiveCategory={sheetId}
@@ -70,6 +71,7 @@ export default function CategoryPage() {
         </div>
 
         <div className="container mx-auto max-w-md px-4 py-2">
+              <h3  className="text-sm text-gray text-center">Click to connect with Movers - Get Details on Whatsapp</h3>
           {loading && (
             <div className="flex justify-center items-center mb-4">
               <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-600"></div>
