@@ -15,17 +15,18 @@ export default function CategoryFilter({ sheets, basePath = "" }: Props) {
   const params = useParams();
 
   // In app/[category]/page.tsx, params.category will be string | undefined
-  const activeCategory = typeof params?.category === "string" ? params.category : "all";
+  const activeCategory =
+    typeof params?.category === "string" ? params.category : "Helsinki";
 
   const handleClick = (id: string) => {
-    router.push(`/${id}`); // Clean path like /all or /canada
+    router.push(`/${id}`);
   };
 
   return (
     <div className="border-solid border-2 rounded-lg overflow-hidden">
       <ScrollArea className="relative overflow-hidden w-full whitespace-nowrap">
         <div className="flex">
-          {[{ id: "all", name: "All" }, ...sheets].map((category) => (
+          {[...sheets].map((category) => (
             <Button
               key={category.id}
               variant={activeCategory === category.id ? "default" : "outline"}
@@ -36,7 +37,7 @@ export default function CategoryFilter({ sheets, basePath = "" }: Props) {
               }`}
               onClick={() => handleClick(category.id)}
             >
-              {category.name}
+              <h3> {category.name}</h3>
             </Button>
           ))}
         </div>

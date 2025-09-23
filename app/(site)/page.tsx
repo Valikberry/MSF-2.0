@@ -12,7 +12,7 @@ import { Calendar } from "lucide-react";
 
 export default function CategoryPage() {
   const { category } = useParams();
-  const sheetId = typeof category === "string" ? category : "all";
+  const sheetId = typeof category === "string" ? category : "Helsinki";
 
   const [sheetData, setSheetData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,16 +46,16 @@ export default function CategoryPage() {
       <div className="flex-grow">
         <Header />
 
-        <div className="container mx-auto max-w-md px-4 py-3">
+        <div className="container mx-auto max-w-md  py-3">
           <div className="container mx-auto max-w-md">
             <div className="flex flex-col items-center">
-              <p className="text-black-700 text-[17.5px] font-bold text-center">
-              Finland Online Marketplace of Moving  Services
-              </p>
-              <span className="flex items-center gap-1">
-                <Calendar color="red" size={15} />
-                <small className="flex items-center">Book online 24/7</small>
-              </span>
+              <h1 className="text-black-700 text-[17.5px] font-bold text-center">
+                Finland’s Online Marketplace of Moving Services
+              </h1>
+
+              <h2>
+                Popular cities: Helsinki · Espoo · Vantaa · Tampere · Porvoo
+              </h2>
             </div>
           </div>
         </div>

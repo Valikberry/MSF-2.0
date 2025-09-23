@@ -5,7 +5,7 @@ import { AppProvider } from "@/context/AppContext";
 
 // SEO Metadata
 export const metadata: Metadata = {
-  title: "Moving Services Finland | Marketplace for Movers",
+  title: "Marketplace for Vans, Drivers & Helpers in Finland",
   description: "Moving Services Finland is a marketplace to compare movers and book vans, drivers & helpers across Helsinki, Espoo, Vantaa, Tampere and more — 24/7 online.",
   keywords: "moving services marketplace, book movers Finland, hire van and driver, movers Helsinki, movers Espoo, movers Vantaa, moving help Finland",
   applicationName: "Moving Services Finland",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.movingservicesfinland.com/",
-    title: "Moving Services Finland | Marketplace for Movers",
+    title: "Marketplace for Vans, Drivers & Helpers in Finland",
     description: "Compare movers, see transparent hourly rates, and book vans, drivers & helpers across Finland — 24/7.",
     images: [
       {
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Moving Services Finland | Marketplace for Movers",
+    title: "Marketplace for Vans, Drivers & Helpers in Finland",
     description: "A marketplace to compare and book moving services anywhere in Finland.",
     images: ["https://www.movingservicesfinland.com/images/twitter-card.jpg"]
   }
