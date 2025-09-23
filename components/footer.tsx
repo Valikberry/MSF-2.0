@@ -47,7 +47,7 @@ export default function Footer() {
             />
           </a>
           <a
-            href="https://www.facebook.com/profile.php?id=61556467616225"
+            href=" https://www.facebook.com/profile.php?id=61559287545856"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -59,7 +59,7 @@ export default function Footer() {
             />
           </a>
           <a
-            href="https://www.reddit.com/"
+            href="https://www.reddit.com/user/Square_Ad6162/"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -70,7 +70,7 @@ export default function Footer() {
               height={20}
             />
           </a>
-          <a
+          {/* <a
             href="https://www.tiktok.com/@movingservicesfinland"
             target="_blank"
             rel="noopener noreferrer"
@@ -81,9 +81,9 @@ export default function Footer() {
               width={20}
               height={20}
             />
-          </a>
+          </a> */}
           <a
-            href="https://x.com/movingservicesfinland"
+            href=" https://x.com/MSFinlandia"
             target="_blank"
             rel="noopener noreferrer"
           >

@@ -5,7 +5,8 @@ export default function MainMenuCards() {
   return (
     <div className="grid grid-cols-2 gap-3 mb-4">
       <Link
-        href={`#`}
+      target="_blank"
+        href={`https://docs.google.com/forms/d/e/1FAIpQLSdOIC2luIiznAbjdBJZxm8dQFVYpVmeB0X79WHjDWPvrnCerg/viewform`}
         className="block bg-gradient-to-b from-[#0a3747] to-[#344b5c] rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow"
       >
         <div className="relative h-16 w-full flex flex-col items-center justify-center">
