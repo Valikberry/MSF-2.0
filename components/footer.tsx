@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -13,7 +14,7 @@ export default function Footer() {
           <span className="text-green-800">|</span>
           <Link href="https://www.info.movingservicesfinland.com/Terms-of-service" target="_blank">T&C</Link>
           <span className="text-green-800">|</span>
-          <Link href="https://www.info.movingservicesfinland.com/msf-blog" target="_blank">FAQ</Link>
+          <Link href=" https://www.info.movingservicesfinland.com/faq" target="_blank">FAQ</Link>
 
        
         </div>
@@ -70,18 +71,19 @@ export default function Footer() {
               height={20}
             />
           </a>
-          {/* <a
-            href="https://www.tiktok.com/@movingservicesfinland"
+          <a
+            href="#"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Image
+            {/* <Image
               src="/footer/tiktok-square-color-icon.svg"
               alt="TikTok"
               width={20}
               height={20}
-            />
-          </a> */}
+            /> */}
+            <Linkedin size={20} color="#0077B5"/>
+          </a>
           <a
             href=" https://x.com/MSFinlandia"
             target="_blank"
