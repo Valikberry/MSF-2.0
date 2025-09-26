@@ -23,10 +23,10 @@ export default function MainMenuCards() {
         className="block bg-[#F7931A] rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow"
       >
         <div className="relative h-16 w-full flex flex-col items-center justify-center">
-          <h3 className="text-white font-semibold text-center text-xs sm:text-sm md:text-base">
+           <h3 className="text-white font-semibold text-center text-sm">
             Find Me A Mover
           </h3>
-          <h4 className="text-white text-center text-xs sm:text-sm">
+            <h4 className="text-white text-center text-xs sm:text-sm">
             (For Customers)
           </h4>
         </div>
