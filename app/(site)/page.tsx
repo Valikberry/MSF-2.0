@@ -50,11 +50,11 @@ export default function CategoryPage() {
           <div className="container mx-auto max-w-md">
             <div className="flex flex-col items-center">
               <h1 className="text-black-700 text-[17.5px] font-bold text-center">
-                Finland’s Online Marketplace for Moving Services
+                Finland's Marketplace for Moving Services
               </h1>
 
               <h2 className="text-black-700 text-sm font-medium text-center">
-                Book Movers in popular cities in Across Finland
+                Book Movers in popular cities  Across Finland
               </h2>
             </div>
           </div>
@@ -74,7 +74,7 @@ export default function CategoryPage() {
             <img
               src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTUuMDkgOC4yNkwyMiA5TDE3IDEzLjc0TDE4LjE4IDIxTDEyIDE3Ljc3TDUuODIgMjFMNyAxMy43NEwyIDlMOC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjRkY2NTQ3IiBzdHJva2U9IiNGRjY1NDciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo="
               alt="Star"
-              className="w-5 h-5 animate-pulse"
+              className="w-4 h-4 animate-bounce"
             />
             <h3 className="text-sm text-gray text-center">
               Click to get details on whatsappp
@@ -82,7 +82,7 @@ export default function CategoryPage() {
             <img
               src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTUuMDkgOC4yNkwyMiA5TDE3IDEzLjc0TDE4LjE4IDIxTDEyIDE3Ljc3TDUuODIgMjFMNyAxMy43NEwyIDlMOC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjRkY2NTQ3IiBzdHJva2U9IiNGRjY1NDciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo="
               alt="Star"
-              className="w-5 h-5 animate-bounce"
+              className="w-4 h-4 animate-bounce"
             />
           </div>
           {loading && (

@@ -28,6 +28,7 @@ export default function CustomCard({ data }: ProductCardProps) {
   const activeColor = statusColors[isAvailable ? "green" : "red"];
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
   const handleClick = async () => {
     if (isLoading) return;
     setIsLoading(true);
@@ -56,8 +57,27 @@ export default function CustomCard({ data }: ProductCardProps) {
       console.log(data, "====");
 
       if (data.waLink) {
-        // Redirect to the WhatsApp link
-        window.open(data.waLink, "_blank", "noopener,noreferrer");
+        // Safari-compatible redirect methods
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        
+        if (isSafari) {
+          // Method 1: Try direct location assignment first
+          try {
+            window.location.href = data.waLink;
+          } catch (e) {
+            // Method 2: Fallback to creating a temporary link element
+            const link = document.createElement('a');
+            link.href = data.waLink;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
+        } else {
+          // For other browsers, use window.open
+          window.open(data.waLink, "_blank", "noopener,noreferrer");
+        }
       } else {
         throw new Error("No WhatsApp link received from server");
       }
@@ -124,9 +144,6 @@ export default function CustomCard({ data }: ProductCardProps) {
             {/* Row 2: Status badges */}
             <div className="flex flex-wrap gap-2">
               {isAvailable ? (
-                // <div className="bg-[#CAF60B] text-green-700 text-xs px-1 py-1 rounded-sm font-medium">
-                //   Active
-                // </div>
                 <div className="bg-[#F0FDF4] text-gray-700 text-xs px-1 py-1 rounded-sm font-medium">
                   Active
                 </div>
